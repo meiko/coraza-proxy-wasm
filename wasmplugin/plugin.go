@@ -281,6 +281,9 @@ func (ctx *httpContext) OnHttpRequestHeaders(numHeaders int, endOfStream bool) t
 
 	tx.ProcessConnection(srcIP, srcPort, dstIP, dstPort)
 
+	//TODO: APISIX
+	proxywasm.SetProperty([]string{"wasm_process_req_body"}, []byte("true"))
+
 	// Note the pseudo-header :path includes the query.
 	// See https://httpwg.org/specs/rfc9113.html#rfc.section.8.3.1
 	uri, err := proxywasm.GetHttpRequestHeader(":path")
@@ -518,6 +521,9 @@ func (ctx *httpContext) OnHttpResponseHeaders(numHeaders int, endOfStream bool) 
 		return ctx.handleInterruption(interruptionPhaseHttpResponseHeaders, interruption)
 	}
 
+
+	//TODO: APISIX
+	proxywasm.SetProperty([]string{"wasm_process_resp_body"}, []byte("true"))
 	return types.ActionContinue
 }
 
